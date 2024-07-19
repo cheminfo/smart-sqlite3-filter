@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/cheminfo/smart-sqlite3-filter/compare/v0.1.0...v0.1.1) (2024-07-19)
+
+
+### Bug Fixes
+
+* refactor and expose types ([0bb9ea0](https://github.com/cheminfo/smart-sqlite3-filter/commit/0bb9ea0c2d7f43552d442a34da3ccf0e15676488))
+
 ## 0.1.0 (2024-07-19)
 
 
