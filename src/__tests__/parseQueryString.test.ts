@@ -8,6 +8,7 @@ test('parseQueryString', () => {
     {
       fields: ['name'],
       operator: '',
+      index: 0,
       values: ['abc'],
       negate: false,
     },

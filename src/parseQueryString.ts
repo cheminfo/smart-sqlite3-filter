@@ -1,13 +1,16 @@
+import { QueryCriterium } from './QueryCriterium';
 import { splitString } from './splitString';
 import { trimQuotes } from './trimQuotes';
 
 /**
  *
  * @param string
+ * @returns array of query criteria
  */
-export function parseQueryString(string: string): any {
+export function parseQueryString(string: string): QueryCriterium[] {
   const tokens = splitString(string);
   const queryCriteria = [];
+  let index = 0;
   for (let token of tokens) {
     let negate = false;
     if (token.startsWith('-')) {
@@ -32,7 +35,7 @@ export function parseQueryString(string: string): any {
 
     const values = splitString(token, { delimiter: ',' });
     token = trimQuotes(token);
-    queryCriteria.push({ fields, operator, values, negate });
+    queryCriteria.push({ fields, operator, values, negate, index: index++ });
   }
 
   // if no values we wkip

@@ -1,5 +1,6 @@
 import { Database } from 'better-sqlite3';
 
+import { Schema } from './Schema';
 import { buildQueryCriteria } from './buildQueryCriteria';
 import { parseQueryString } from './parseQueryString';
 
@@ -13,21 +14,31 @@ interface SearchOptions {
    * @default 1000
    */
   limit?: number;
-  defaultFields: string[];
-  fieldsAliases: Record<string, string[]>;
+  /**
+   * In which fields to search. If not provided all fields will be searched.
+   */
+  defaultFields?: string[];
+  /**
+   * Aliases for the fields. If not provided the fields will be used as aliases
+   * It is possible to specify many fields in which the search will be performed
+   */
+  fieldsAliases?: Record<string, string[]>;
 }
 
+type Entry = Record<string, number | string>;
+
 /**
- *
+ * Search the database for the given query string
  * @param queryString
  * @param db
  * @param options
+ * @returns The results of the search
  */
 export function search(
   queryString: string,
   db: Database,
   options: SearchOptions = {},
-): any[] {
+): Entry[] {
   const { tableName = getTableName(db), limit = 1000 } = options;
   const schema = getSchema(db, tableName);
   const criteria = parseQueryString(queryString);
@@ -44,7 +55,7 @@ export function search(
     sqls.push(`LIMIT ${limit}`);
   }
   const stmt = db.prepare(sqls.join(' '));
-  return stmt.all(values);
+  return stmt.all(values) as Entry[];
 }
 
 interface TableList {
@@ -58,9 +69,8 @@ interface TableList {
 
 function getTableName(db: Database): string {
   const stmt = db.prepare('PRAGMA table_list');
-  const tables = stmt
-    .all()
-    .filter((table) => !table.name.startsWith('sqlite_')) as TableList[];
+  const allTables = stmt.all() as TableList[];
+  const tables = allTables.filter((table) => !table.name.startsWith('sqlite_'));
   if (tables.length === 0) {
     throw new Error('Expected at least one table in the database');
   }
@@ -72,7 +82,7 @@ function getTableName(db: Database): string {
   return tables[0].name;
 }
 
-interface TableInfo {
+export interface TableInfo {
   cid: number;
   name: 'INTEGER' | 'TEXT' | 'REAL' | 'BLOB' | 'BOOLEAN';
   type: string;
@@ -82,11 +92,11 @@ interface TableInfo {
   pk: number;
 }
 
-function getSchema(db: Database, tableName: string): Record<string, any> {
+function getSchema(db: Database, tableName: string): Schema {
   const stmt = db.prepare(`PRAGMA table_info(${tableName})`);
   const tableInfo = stmt.all() as TableInfo[];
 
-  const schema: Record<string, TableInfo> = {};
+  const schema: Schema = {};
   for (const column of tableInfo) {
     schema[column.name] = column;
   }

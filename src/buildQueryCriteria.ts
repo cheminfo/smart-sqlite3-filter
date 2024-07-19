@@ -1,3 +1,13 @@
+import { QueryCriterium } from './QueryCriterium';
+import { Schema } from './Schema';
+
+type Values = Record<string, number | string>;
+
+interface BuildQueryCriteriaOptions {
+  defaultFields?: string[];
+  fieldsAliases?: Record<string, string[]>;
+}
+
 /**
  *
  * @param criteria
@@ -5,16 +15,14 @@
  * @param options
  */
 export function buildQueryCriteria(
-  criteria,
-  schema,
-  options,
+  criteria: QueryCriterium[],
+  schema: Schema,
+  options: BuildQueryCriteriaOptions = {},
 ): Record<string, number | string> {
   const { defaultFields = Object.keys(schema), fieldsAliases = {} } = options;
-  const values = {};
+  const values: Values = {};
   // ensure we know where to search
-  let index = 0;
   for (const criterium of criteria) {
-    criterium.index = index++;
     if (criterium.fields.length === 1) {
       if (fieldsAliases[criterium.fields[0]]) {
         criterium.fields = fieldsAliases[criterium.fields[0]];
@@ -40,7 +48,7 @@ export function buildQueryCriteria(
   return values;
 }
 
-function buildSQL(criterium, schema, values) {
+function buildSQL(criterium: QueryCriterium, schema: Schema, values: Values) {
   const sql = [];
   for (const field of criterium.fields) {
     const column = schema[field];
@@ -63,7 +71,7 @@ function buildSQL(criterium, schema, values) {
   return `(${sql.join(' OR ')})`;
 }
 
-function processText(field, criterium, values) {
+function processText(field: string, criterium: QueryCriterium, values: Values) {
   if (!criterium.operator) {
     criterium.operator = '^';
   }
@@ -99,7 +107,11 @@ function processText(field, criterium, values) {
   return `(${sqls.join(' OR ')})`;
 }
 
-function processNumber(field, criterium, values) {
+function processNumber(
+  field: string,
+  criterium: QueryCriterium,
+  values: Values,
+) {
   if (!criterium.operator) {
     criterium.operator = '=';
   }
@@ -143,8 +155,12 @@ function processNumber(field, criterium, values) {
   return `(${sqls.join(' OR ')})`;
 }
 
-function processBoolean(field, criterium, values) {
-  if (values.length > 1) {
+function processBoolean(
+  field: string,
+  criterium: QueryCriterium,
+  values: Values,
+) {
+  if (criterium.values.length > 1) {
     throw new Error('Boolean does not support multiple values');
   }
   const value = criterium.values[0];

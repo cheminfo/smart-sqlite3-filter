@@ -1,6 +1,8 @@
+import { test, expect } from 'vitest';
+
 import { search } from '../search';
 
-import { getDB } from './getDB';
+import { getDB } from './utils/getDB';
 
 test('text', () => {
   const db = getDB();
