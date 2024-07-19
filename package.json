@@ -1,0 +1,51 @@
+{
+  "name": "smart-sqlite3-filter",
+  "version": "0.0.0",
+  "description": "",
+  "main": "./lib/index.js",
+  "module": "./lib-esm/index.js",
+  "types": "./lib/index.d.ts",
+  "keywords": [],
+  "author": "Luc Patiny",
+  "license": "MIT",
+  "files": [
+    "src",
+    "lib",
+    "lib-esm"
+  ],
+  "scripts": {
+    "check-types": "tsc --noEmit",
+    "clean": "rimraf lib lib-esm",
+    "eslint": "eslint src --cache",
+    "eslint-fix": "npm run eslint -- --fix",
+    "prepack": "npm run tsc",
+    "prettier": "prettier --check src",
+    "prettier-write": "prettier --write src",
+    "test": "npm run test-only && npm run eslint && npm run prettier && npm run check-types",
+    "test-only": "jest --coverage",
+    "tsc": "npm run clean && npm run tsc-cjs && npm run tsc-esm",
+    "tsc-cjs": "tsc --project tsconfig.cjs.json",
+    "tsc-esm": "tsc --project tsconfig.esm.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cheminfo/smart-sqlite3-filter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cheminfo/smart-sqlite3-filter/issues"
+  },
+  "homepage": "https://github.com/cheminfo/smart-sqlite3-filter#readme",
+  "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.24.8",
+    "@babel/preset-typescript": "^7.24.7",
+    "@types/better-sqlite3": "^7.6.11",
+    "@types/jest": "^29.5.12",
+    "better-sqlite3": "^11.1.2",
+    "eslint": "^8.57.0",
+    "eslint-config-cheminfo-typescript": "^14.0.0",
+    "prettier": "^3.3.3",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.5.3",
+    "vitest": "^2.0.3"
+  }
+}
