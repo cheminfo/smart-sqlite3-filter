@@ -1,6 +1,6 @@
 {
   "name": "smart-sqlite3-filter",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Query a sqlite3 database using better-sqlite3 in a way like 'firstName:luc'.",
   "main": "./lib/index.js",
   "module": "./lib-esm/index.js",
