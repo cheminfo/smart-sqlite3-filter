@@ -54,6 +54,8 @@ export function search(
   if (limit) {
     sqls.push(`LIMIT ${limit}`);
   }
+  //console.log(sqls);
+  //console.log(values);
   const stmt = db.prepare(sqls.join(' '));
   return stmt.all(values) as Entry[];
 }

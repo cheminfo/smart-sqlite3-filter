@@ -40,7 +40,6 @@ export function buildQueryCriteria(
       }
     }
   }
-
   // build the corresponding sql part
   for (const criterium of criteria) {
     criterium.sql = buildSQL(criterium, schema, values);
@@ -72,16 +71,13 @@ function buildSQL(criterium: QueryCriterium, schema: Schema, values: Values) {
 }
 
 function processText(field: string, criterium: QueryCriterium, values: Values) {
-  if (!criterium.operator) {
-    criterium.operator = '^';
-  }
-
+  const operator = criterium.operator || '^';
   const sqls = [];
   for (let valueIndex = 0; valueIndex < criterium.values.length; valueIndex++) {
     const value = criterium.values[valueIndex];
 
     const valueFieldName = `${field}_${criterium.index}_${valueIndex}`;
-    switch (criterium.operator) {
+    switch (operator) {
       case '^':
         values[valueFieldName] = `${value}%`;
         sqls.push(`${field} LIKE :${valueFieldName}`);
@@ -112,16 +108,15 @@ function processNumber(
   criterium: QueryCriterium,
   values: Values,
 ) {
-  if (!criterium.operator) {
-    criterium.operator = '=';
-  }
+  const operator = criterium.operator || '=';
   const sqls = [];
+  let joinOperator = 'OR';
   for (let valueIndex = 0; valueIndex < criterium.values.length; valueIndex++) {
     const value = criterium.values[valueIndex];
 
     const valueFieldName = `${field}_${criterium.index}_${valueIndex}`;
 
-    switch (criterium.operator) {
+    switch (operator) {
       case '=':
         values[valueFieldName] = Number(value);
         sqls.push(`${field} = :${valueFieldName}`);
@@ -135,6 +130,12 @@ function processNumber(
             `${field} BETWEEN :${valueFieldName}_min AND :${valueFieldName}_max`,
           );
         }
+        break;
+      case '!=':
+      case '<>':
+        values[valueFieldName] = Number(value);
+        sqls.push(`${field} != :${valueFieldName}`);
+        joinOperator = 'AND';
         break;
       case '<=':
       case '<':
@@ -152,7 +153,7 @@ function processNumber(
         );
     }
   }
-  return `(${sqls.join(' OR ')})`;
+  return `(${sqls.join(` ${joinOperator} `)})`;
 }
 
 function processBoolean(
@@ -164,10 +165,8 @@ function processBoolean(
     throw new Error('Boolean does not support multiple values');
   }
   const value = criterium.values[0];
-  if (!criterium.operator) {
-    criterium.operator = '=';
-  }
-  switch (criterium.operator) {
+  const operator = criterium.operator || '=';
+  switch (operator) {
     case '=':
       values[`${field}_${criterium.index}`] = value ? 1 : 0;
       return `${field} = :${field}_${criterium.index}`;
