@@ -1,10 +1,11 @@
 import { Database } from 'better-sqlite3';
 
-import { Schema } from './Schema';
-import { buildQueryCriteria } from './buildQueryCriteria';
-import { parseQueryString } from './parseQueryString';
+import { Schema } from './types/Schema';
+import { TableInfo } from './types/TableInfo';
+import { buildQueryCriteria } from './utils/buildQueryCriteria';
+import { parseQueryString } from './utils/parseQueryString';
 
-interface SearchOptions {
+export interface SearchOptions {
   /**
    * The name of the table to search. If not provided and there is only a table in the database it will be sued.
    */
@@ -25,7 +26,7 @@ interface SearchOptions {
   fieldsAliases?: Record<string, string[]>;
 }
 
-type Entry = Record<string, number | string>;
+export type Entry = Record<string, number | string>;
 
 /**
  * Search the database for the given query string
@@ -82,16 +83,6 @@ function getTableName(db: Database): string {
     );
   }
   return tables[0].name;
-}
-
-export interface TableInfo {
-  cid: number;
-  name: 'INTEGER' | 'TEXT' | 'REAL' | 'BLOB' | 'BOOLEAN';
-  type: string;
-  notnull: number;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  dflt_value: any;
-  pk: number;
 }
 
 function getSchema(db: Database, tableName: string): Schema {

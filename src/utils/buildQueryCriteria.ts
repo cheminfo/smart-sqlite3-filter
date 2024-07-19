@@ -1,5 +1,5 @@
-import { QueryCriterium } from './QueryCriterium';
-import { Schema } from './Schema';
+import { QueryCriterium } from '../types/QueryCriterium';
+import { Schema } from '../types/Schema';
 
 type Values = Record<string, number | string>;
 

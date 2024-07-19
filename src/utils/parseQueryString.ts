@@ -1,4 +1,4 @@
-import { QueryCriterium } from './QueryCriterium';
+import { QueryCriterium } from '../types/QueryCriterium';
 import { splitString } from './splitString';
 import { trimQuotes } from './trimQuotes';
 

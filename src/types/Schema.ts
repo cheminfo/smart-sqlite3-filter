@@ -1,3 +1,3 @@
-import { TableInfo } from './search';
+import { TableInfo } from './TableInfo';
 
 export type Schema = Record<string, TableInfo>;
