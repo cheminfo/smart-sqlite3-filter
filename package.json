@@ -1,7 +1,7 @@
 {
   "name": "smart-sqlite3-filter",
   "version": "0.0.0",
-  "description": "Query a sqlite3 database using better-sqlite3 in a way like 'firstname:luc'.",
+  "description": "Query a sqlite3 database using better-sqlite3 in a way like 'firstName:luc'.",
   "main": "./lib/index.js",
   "module": "./lib-esm/index.js",
   "types": "./lib/index.d.ts",
@@ -39,7 +39,6 @@
     "@babel/plugin-transform-modules-commonjs": "^7.24.8",
     "@babel/preset-typescript": "^7.24.7",
     "@types/better-sqlite3": "^7.6.11",
-    "@types/jest": "^29.5.12",
     "@vitest/coverage-v8": "^2.0.3",
     "better-sqlite3": "^11.1.2",
     "eslint": "^8.57.0",

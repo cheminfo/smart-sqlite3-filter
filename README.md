@@ -5,7 +5,14 @@
 [![Test coverage][codecov-image]][codecov-url]
 [![npm download][download-image]][download-url]
 
-This package allows to query a sqlite3 database using better-sqlite3 in a way like 'firstname:luc'.
+This package allows to query a sqlite3 database using better-sqlite3 in a way like 'firstName:luc'.
+
+## Development on Apple Silicon
+
+```bash
+cd node_modules/better-sqlite3
+npm run build-release
+```
 
 ## Installation
 
@@ -16,7 +23,7 @@ This package allows to query a sqlite3 database using better-sqlite3 in a way li
 ```js
 import { search } from 'smart-sqlite3-filter';
 
-const results = search('firstname:luc', db, { limit: 2 });
+const results = search('firstName:luc', db, { limit: 2 });
 ```
 
 ## License
