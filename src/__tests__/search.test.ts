@@ -53,7 +53,7 @@ test('errors', () => {
   );
 });
 
-test.only('names', () => {
+test('names', () => {
   const db = getDBNames();
   /*
     ('John', 1990),
