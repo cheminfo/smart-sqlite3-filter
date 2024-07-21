@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/cheminfo/smart-sqlite3-filter/compare/v0.1.1...v0.1.2) (2024-07-21)
+
+
+### Bug Fixes
+
+* ignore filtering values that do not have the right type ([e4a01b4](https://github.com/cheminfo/smart-sqlite3-filter/commit/e4a01b4fd08d70419471d2fbfe981470bcebce0a))
+
 ## [0.1.1](https://github.com/cheminfo/smart-sqlite3-filter/compare/v0.1.0...v0.1.1) (2024-07-19)
 
 
