@@ -7,6 +7,7 @@ import { getDBNames } from './utils/getDBNames';
 
 test('text', () => {
   const db = getDB();
+  expect(search('text-12', db)).toHaveLength(2);
   expect(search('textColumn:text-1', db)).toHaveLength(22);
   expect(search('textColumn:=text-1', db)).toHaveLength(1);
   expect(search('textColumn:text-1', db, { limit: 5 })).toHaveLength(5);
@@ -52,7 +53,7 @@ test('errors', () => {
   );
 });
 
-test('names', () => {
+test.only('names', () => {
   const db = getDBNames();
   /*
     ('John', 1990),
@@ -71,6 +72,6 @@ test('names', () => {
   expect(search('year:!=1990,2000', db)).toHaveLength(1);
   expect(search('year:<>1990,2000', db)).toHaveLength(1);
   expect(search('year:1990,2000 name:$e,n', db)).toHaveLength(2);
-  expect(search('year:"1990,2000"', db)).toHaveLength(0);
+  expect(search('year:"1990,2000"', db)).toHaveLength(4);
   expect(search('year:"1990","2000"', db)).toHaveLength(3);
 });

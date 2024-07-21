@@ -2,7 +2,7 @@ import { Database } from 'better-sqlite3';
 
 import { Schema } from './types/Schema';
 import { TableInfo } from './types/TableInfo';
-import { buildQueryCriteria } from './utils/buildQueryCriteria';
+import { appendSQLForCriteria } from './utils/appendSQLForCriteria';
 import { parseQueryString } from './utils/parseQueryString';
 
 export interface SearchOptions {
@@ -42,8 +42,10 @@ export function search(
 ): Entry[] {
   const { tableName = getTableName(db), limit = 1000 } = options;
   const schema = getSchema(db, tableName);
-  const criteria = parseQueryString(queryString);
-  const values = buildQueryCriteria(criteria, schema, options);
+  let criteria = parseQueryString(queryString);
+  const values = appendSQLForCriteria(criteria, schema, options);
+  // some criteria may should be removed because they don't have sql property
+  criteria = criteria.filter((criterium) => criterium.sql);
 
   const sqls: string[] = [];
   sqls.push(`SELECT * FROM ${tableName}`);
@@ -55,7 +57,6 @@ export function search(
   if (limit) {
     sqls.push(`LIMIT ${limit}`);
   }
-  //console.log(sqls);
   //console.log(values);
   const stmt = db.prepare(sqls.join(' '));
   return stmt.all(values) as Entry[];

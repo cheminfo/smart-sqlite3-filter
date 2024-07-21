@@ -3,7 +3,7 @@ import { Schema } from '../types/Schema';
 
 type Values = Record<string, number | string>;
 
-interface BuildQueryCriteriaOptions {
+interface AppendSQLForCriteriaOptions {
   defaultFields?: string[];
   fieldsAliases?: Record<string, string[]>;
 }
@@ -14,10 +14,10 @@ interface BuildQueryCriteriaOptions {
  * @param schema
  * @param options
  */
-export function buildQueryCriteria(
+export function appendSQLForCriteria(
   criteria: QueryCriterium[],
   schema: Schema,
-  options: BuildQueryCriteriaOptions = {},
+  options: AppendSQLForCriteriaOptions = {},
 ): Record<string, number | string> {
   const { defaultFields = Object.keys(schema), fieldsAliases = {} } = options;
   const values: Values = {};
@@ -54,15 +54,30 @@ function buildSQL(criterium: QueryCriterium, schema: Schema, values: Values) {
 
     switch (column.type) {
       case 'TEXT':
-        sql.push(processText(field, criterium, values));
+        {
+          const newSQL = processText(field, criterium, values);
+          if (newSQL) {
+            sql.push(newSQL);
+          }
+        }
         break;
       case 'REAL':
       case 'INT':
       case 'INTEGER':
-        sql.push(processNumber(field, criterium, values));
+        {
+          const newSQL = processNumber(field, criterium, values);
+          if (newSQL) {
+            sql.push(newSQL);
+          }
+        }
         break;
       case 'BOOLEAN':
-        sql.push(processBoolean(field, criterium, values));
+        {
+          const newSQL = processBoolean(field, criterium, values);
+          if (newSQL) {
+            sql.push(newSQL);
+          }
+        }
         break;
       case 'BLOB':
       case 'NULL':
@@ -72,6 +87,9 @@ function buildSQL(criterium: QueryCriterium, schema: Schema, values: Values) {
           `Type ${column.type} is not supported. Consider using STRICT mode to avoid issues. The following types are supported: TEXT, REAL, INTEGER, BOOLEAN`,
         );
     }
+  }
+  if (sql.length === 0) {
+    return '';
   }
   return `(${sql.join(' OR ')})`;
 }
@@ -119,7 +137,10 @@ function processNumber(
   let joinOperator = 'OR';
   for (let valueIndex = 0; valueIndex < criterium.values.length; valueIndex++) {
     const value = criterium.values[valueIndex];
-
+    // is it really a number ? We should skip otherwise
+    if (operator !== '..' && Number.isNaN(Number(value))) {
+      continue;
+    }
     const valueFieldName = `${field}_${criterium.index}_${valueIndex}`;
 
     switch (operator) {
@@ -159,6 +180,9 @@ function processNumber(
         );
     }
   }
+  if (sqls.length === 0) {
+    return '';
+  }
   return `(${sqls.join(` ${joinOperator} `)})`;
 }
 
@@ -170,7 +194,10 @@ function processBoolean(
   if (criterium.values.length > 1) {
     throw new Error('Boolean does not support multiple values');
   }
-  const value = criterium.values[0];
+  const value = getBooleanValue(criterium.values[0]);
+  if (value === null) {
+    return '';
+  }
   const operator = criterium.operator || '=';
   switch (operator) {
     case '=':
@@ -181,4 +208,15 @@ function processBoolean(
         `Operator ${criterium.operator} is not supported for Boolean`,
       );
   }
+}
+
+function getBooleanValue(value: string): boolean | null {
+  value = value.toLowerCase();
+  if (value === 'true' || value === '1' || value === 'yes') {
+    return true;
+  }
+  if (value === 'false' || value === '0' || value === 'no') {
+    return false;
+  }
+  return null;
 }

@@ -1,4 +1,5 @@
 import { QueryCriterium } from '../types/QueryCriterium';
+
 import { splitString } from './splitString';
 import { trimQuotes } from './trimQuotes';
 
@@ -37,7 +38,6 @@ export function parseQueryString(string: string): QueryCriterium[] {
     token = trimQuotes(token);
     queryCriteria.push({ fields, operator, values, negate, index: index++ });
   }
-
-  // if no values we wkip
+  // if no values
   return queryCriteria.filter((criterium) => criterium.values.length > 0);
 }
