@@ -57,14 +57,20 @@ function buildSQL(criterium: QueryCriterium, schema: Schema, values: Values) {
         sql.push(processText(field, criterium, values));
         break;
       case 'REAL':
+      case 'INT':
       case 'INTEGER':
         sql.push(processNumber(field, criterium, values));
         break;
       case 'BOOLEAN':
         sql.push(processBoolean(field, criterium, values));
         break;
+      case 'BLOB':
+      case 'NULL':
+        break;
       default:
-        throw new Error(`Type ${column.type} is not supported`);
+        throw new Error(
+          `Type ${column.type} is not supported. Consider using STRICT mode to avoid issues. The following types are supported: TEXT, REAL, INTEGER, BOOLEAN`,
+        );
     }
   }
   return `(${sql.join(' OR ')})`;
