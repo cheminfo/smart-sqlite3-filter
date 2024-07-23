@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/cheminfo/smart-sqlite3-filter/compare/v0.1.2...v0.2.0) (2024-07-23)
+
+
+### Features
+
+* add orderBy parameter ([1fef57a](https://github.com/cheminfo/smart-sqlite3-filter/commit/1fef57ae3a4913c6569466302b4e0f0b5f60246d))
+
 ## [0.1.2](https://github.com/cheminfo/smart-sqlite3-filter/compare/v0.1.1...v0.1.2) (2024-07-21)
 
 
