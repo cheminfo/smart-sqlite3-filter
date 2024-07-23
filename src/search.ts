@@ -7,6 +7,11 @@ import { parseQueryString } from './utils/parseQueryString';
 
 export interface SearchOptions {
   /**
+   * Specify the order of the results
+   * @default: ''
+   */
+  orderBy?: string;
+  /**
    * The name of the table to search. If not provided and there is only a table in the database it will be sued.
    */
   tableName?: string;
@@ -40,7 +45,7 @@ export function search(
   db: Database,
   options: SearchOptions = {},
 ): Entry[] {
-  const { tableName = getTableName(db), limit = 1000 } = options;
+  const { tableName = getTableName(db), limit = 1000, orderBy = '' } = options;
   const schema = getSchema(db, tableName);
   let criteria = parseQueryString(queryString);
   const values = appendSQLForCriteria(criteria, schema, options);
@@ -53,6 +58,9 @@ export function search(
     sqls.push(
       `WHERE ${criteria.map((criterium) => criterium.sql).join(' AND ')}`,
     );
+  }
+  if (orderBy) {
+    sqls.push(`ORDER BY ${orderBy}`);
   }
   if (limit) {
     sqls.push(`LIMIT ${limit}`);

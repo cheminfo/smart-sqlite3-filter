@@ -40,6 +40,14 @@ test('number', () => {
   expect(search('numberColumn:5..6', db)).toHaveLength(4);
 });
 
+test('orderBy', () => {
+  const db = getDB();
+  const result = search('numberColumn:1,2,3', db, {
+    orderBy: 'numberColumn DESC',
+  }).map((entry) => entry.numberColumn);
+  expect(result).toEqual([3, 3, 2, 2, 1, 1]);
+});
+
 test('errors', () => {
   const db = getDB();
   expect(() => search('numberColumn:>1,2', db)).toThrow(
