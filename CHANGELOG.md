@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.0](https://github.com/cheminfo/smart-sqlite3-filter/compare/v0.2.0...v0.3.0) (2024-07-24)
+
+
+### Features
+
+* add logger ([8e6b866](https://github.com/cheminfo/smart-sqlite3-filter/commit/8e6b866c4eef1429f0c035c52c2d397a0bdc4dd1))
+* number search are fuzzy by default ([0316949](https://github.com/cheminfo/smart-sqlite3-filter/commit/0316949c094886deb6a168ddd2d0fe036cbc5cbc))
+
 ## [0.2.0](https://github.com/cheminfo/smart-sqlite3-filter/compare/v0.1.2...v0.2.0) (2024-07-23)
 
 
