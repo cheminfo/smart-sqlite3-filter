@@ -43,9 +43,14 @@
     "better-sqlite3": "^11.1.2",
     "eslint": "^8.57.0",
     "eslint-config-cheminfo-typescript": "^14.0.0",
+    "fifo-logger": "^1.0.0",
+    "jest-matcher-deep-close-to": "^3.0.2",
     "prettier": "^3.3.3",
     "rimraf": "^6.0.1",
     "typescript": "^5.5.3",
     "vitest": "^2.0.3"
+  },
+  "dependencies": {
+    "cheminfo-types": "^1.7.3"
   }
 }

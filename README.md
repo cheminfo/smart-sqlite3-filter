@@ -30,12 +30,14 @@ const sql = `
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     year INTEGER NOT NULL
+    age REAL NOT NULL
   );
-  INSERT INTO names (name, year) VALUES
-  ('John', 1990),
-  ('Jane', 1985),
-  ('Alice', 2000),
-  ('Bob', 1990);
+
+  INSERT INTO names (name, year, age) VALUES
+    ('John', 1990, 30.1),
+    ('Jane', 1985, 29.7),
+    ('Alice', 2000, 25),
+    ('Bob', 1990, 43);
 `;
 db.exec(sql);
 
@@ -51,6 +53,10 @@ search('J', db); // [{name: 'John', year: 1990}, {name: 'Jane', year: 1985}]
 search('year:>1990', db); // [{name: 'Alice', year: 2000}]
 search('year:!=1990,2000', db); // [{name: 'Jane', year: 1985}]
 search('year:<>1990,2000', db); // [{name: 'Jane', year: 1985}]
+
+search('age:30', db); // by default we take into account significative digits and it will search between 29.5 and 30.5
+search('age:=30', db); // must be exactly 30, no hit
+search('age:=25', db); // must be exactly 25, 1 hit
 
 // when searching for a string we can use the following operators: '^' (starts with), '$' (ends with), '~' (contains), '='. Default to contains. When searching for '=' it is case sensitive otherwise it is not.
 search('name:~o', db); // [{name: 'John', year: 1990}, {name: 'Bob', year: 1990}]

@@ -1,4 +1,5 @@
 import { Database } from 'better-sqlite3';
+import { Logger } from 'cheminfo-types';
 
 import { Schema } from './types/Schema';
 import { TableInfo } from './types/TableInfo';
@@ -29,6 +30,10 @@ export interface SearchOptions {
    * It is possible to specify many fields in which the search will be performed
    */
   fieldsAliases?: Record<string, string[]>;
+  /**
+   * We can log more information about how queries are executed
+   */
+  logger?: Logger;
 }
 
 export type Entry = Record<string, number | string>;

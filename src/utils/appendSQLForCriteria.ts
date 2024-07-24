@@ -1,11 +1,16 @@
+import { Logger } from 'cheminfo-types';
+
 import { QueryCriterium } from '../types/QueryCriterium';
 import { Schema } from '../types/Schema';
+
+import { getNumberRange } from './getNumberRange';
 
 type Values = Record<string, number | string>;
 
 interface AppendSQLForCriteriaOptions {
   defaultFields?: string[];
   fieldsAliases?: Record<string, string[]>;
+  logger?: Logger;
 }
 
 /**
@@ -44,12 +49,17 @@ export function appendSQLForCriteria(
   }
   // build the corresponding sql part
   for (const criterium of criteria) {
-    criterium.sql = buildSQL(criterium, schema, values);
+    criterium.sql = buildSQL(criterium, schema, values, options);
   }
   return values;
 }
 
-function buildSQL(criterium: QueryCriterium, schema: Schema, values: Values) {
+function buildSQL(
+  criterium: QueryCriterium,
+  schema: Schema,
+  values: Values,
+  options: AppendSQLForCriteriaOptions,
+) {
   const sql = [];
   for (const field of criterium.fields) {
     const column = schema[field];
@@ -67,7 +77,7 @@ function buildSQL(criterium: QueryCriterium, schema: Schema, values: Values) {
       case 'INT':
       case 'INTEGER':
         {
-          const newSQL = processNumber(field, criterium, values);
+          const newSQL = processNumber(field, criterium, values, options);
           if (newSQL) {
             sql.push(newSQL);
           }
@@ -75,7 +85,7 @@ function buildSQL(criterium: QueryCriterium, schema: Schema, values: Values) {
         break;
       case 'BOOLEAN':
         {
-          const newSQL = processBoolean(field, criterium, values);
+          const newSQL = processBoolean(field, criterium, values, options);
           if (newSQL) {
             sql.push(newSQL);
           }
@@ -133,8 +143,10 @@ function processNumber(
   field: string,
   criterium: QueryCriterium,
   values: Values,
+  options: AppendSQLForCriteriaOptions,
 ) {
-  const operator = criterium.operator || '=';
+  const { logger } = options;
+  const operator = criterium.operator || '~';
   const sqls = [];
   let joinOperator = 'OR';
   for (let valueIndex = 0; valueIndex < criterium.values.length; valueIndex++) {
@@ -146,6 +158,17 @@ function processNumber(
     const valueFieldName = `${field}_${criterium.index}_${valueIndex}`;
 
     switch (operator) {
+      case '~':
+        {
+          // we consider by default that a number is not exact by default
+          const { min, max } = getNumberRange(value);
+          values[`${valueFieldName}_min`] = min;
+          values[`${valueFieldName}_max`] = max;
+          sqls.push(
+            `${field} BETWEEN :${valueFieldName}_min AND :${valueFieldName}_max`,
+          );
+        }
+        break;
       case '=':
         values[valueFieldName] = Number(value);
         sqls.push(`${field} = :${valueFieldName}`);
@@ -153,6 +176,10 @@ function processNumber(
       case '..':
         {
           const [min, max] = value.split('..').map(Number);
+          if (Number.isNaN(min) || Number.isNaN(max)) {
+            if (logger) logger.info(`Invalid range for ${field}: ${value}`);
+            continue;
+          }
           values[`${valueFieldName}_min`] = min;
           values[`${valueFieldName}_max`] = max;
           sqls.push(
@@ -192,9 +219,12 @@ function processBoolean(
   field: string,
   criterium: QueryCriterium,
   values: Values,
+  options: AppendSQLForCriteriaOptions,
 ) {
+  const { logger } = options;
   if (criterium.values.length > 1) {
-    throw new Error('Boolean does not support multiple values');
+    if (logger) logger.info('Boolean does not support multiple values');
+    return '';
   }
   const value = getBooleanValue(criterium.values[0]);
   if (value === null) {
