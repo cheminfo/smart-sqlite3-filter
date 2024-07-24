@@ -35,8 +35,10 @@ export function appendSQLForCriteria(
   // check if all the fields exists in the schema
   for (const criterium of criteria) {
     for (const field of criterium.fields) {
-      if (!schema[field]) {
-        throw new Error(`Field ${field} does not exist in the schema`);
+      // we allow to search for a jpath
+      const realField = field.split('.')[0];
+      if (!schema[realField]) {
+        throw new Error(`Field ${realField} does not exist in the schema`);
       }
     }
   }
