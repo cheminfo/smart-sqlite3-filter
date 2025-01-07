@@ -50,7 +50,12 @@ export function search(
   db: Database,
   options: SearchOptions = {},
 ): Entry[] {
-  const { tableName = getTableName(db), limit = 1000, orderBy = '' } = options;
+  const {
+    tableName = getTableName(db),
+    limit = 1000,
+    orderBy = '',
+    logger,
+  } = options;
   const schema = getSchema(db, tableName);
   let criteria = parseQueryString(queryString);
   const values = appendSQLForCriteria(criteria, schema, options);
@@ -71,6 +76,9 @@ export function search(
     sqls.push(`LIMIT ${limit}`);
   }
   //console.log(values);
+
+  logger?.debug(values, `SQL statement: ${sqls.join(' ')}`);
+
   const stmt = db.prepare(sqls.join(' '));
   return stmt.all(values) as Entry[];
 }

@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+import { FifoLogger } from 'fifo-logger';
 import { test, expect } from 'vitest';
 
 import { search } from '../search';
@@ -58,4 +60,19 @@ test('errors', () => {
   expect(() => search('textColumn:>""', db)).toThrow(
     'Operator > is not supported for String',
   );
+});
+
+test('logger', () => {
+  const db = getDB();
+  const logger1 = new FifoLogger();
+  search('textColumn:text-1', db, { logger: logger1 });
+  expect(logger1.getLogs()).toHaveLength(0);
+  const logger2 = new FifoLogger({ level: 'debug' });
+  search('textColumn:text-1', db, { logger: logger2 });
+  const logs = logger2.getLogs();
+  expect(logs).toHaveLength(1);
+  expect(logs[0].message).toBe(
+    'SQL statement: SELECT * FROM entries WHERE ((textColumn LIKE :textColumn_0_0)) LIMIT 1000',
+  );
+  expect(logs[0].meta).toStrictEqual({ textColumn_0_0: 'text-1%' });
 });
