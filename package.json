@@ -36,21 +36,21 @@
   },
   "homepage": "https://github.com/cheminfo/smart-sqlite3-filter#readme",
   "devDependencies": {
-    "@babel/plugin-transform-modules-commonjs": "^7.24.8",
-    "@babel/preset-typescript": "^7.24.7",
-    "@types/better-sqlite3": "^7.6.11",
-    "@vitest/coverage-v8": "^2.0.3",
-    "better-sqlite3": "^11.1.2",
-    "eslint": "^8.57.0",
-    "eslint-config-cheminfo-typescript": "^14.0.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.26.3",
+    "@babel/preset-typescript": "^7.26.0",
+    "@types/better-sqlite3": "^7.6.12",
+    "@vitest/coverage-v8": "^2.1.8",
+    "better-sqlite3": "^11.7.2",
+    "eslint": "^9.17.0",
+    "eslint-config-cheminfo-typescript": "^17.0.0",
     "fifo-logger": "^1.0.0",
     "jest-matcher-deep-close-to": "^3.0.2",
-    "prettier": "^3.3.3",
+    "prettier": "^3.4.2",
     "rimraf": "^6.0.1",
-    "typescript": "^5.5.3",
-    "vitest": "^2.0.3"
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
   },
   "dependencies": {
-    "cheminfo-types": "^1.7.3"
+    "cheminfo-types": "^1.8.1"
   }
 }

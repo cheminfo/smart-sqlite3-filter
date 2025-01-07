@@ -1,4 +1,4 @@
-import { QueryCriterium } from '../types/QueryCriterium';
+import type { QueryCriterium } from '../types/QueryCriterium';
 
 import { splitString } from './splitString';
 import { trimQuotes } from './trimQuotes';
@@ -20,7 +20,7 @@ export function parseQueryString(string: string): QueryCriterium[] {
     }
     const colon = token.indexOf(':');
     const fields = [];
-    if (colon > -1) {
+    if (colon !== -1) {
       fields.push(...token.slice(0, colon).split(','));
       token = token.slice(colon + 1);
     }

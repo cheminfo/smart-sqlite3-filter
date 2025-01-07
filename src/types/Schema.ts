@@ -1,3 +1,3 @@
-import { TableInfo } from './TableInfo';
+import type { TableInfo } from './TableInfo';
 
 export type Schema = Record<string, TableInfo>;

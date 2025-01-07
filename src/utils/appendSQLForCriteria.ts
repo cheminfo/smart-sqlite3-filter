@@ -1,7 +1,7 @@
-import { Logger } from 'cheminfo-types';
+import type { Logger } from 'cheminfo-types';
 
-import { QueryCriterium } from '../types/QueryCriterium';
-import { Schema } from '../types/Schema';
+import type { QueryCriterium } from '../types/QueryCriterium';
+import type { Schema } from '../types/Schema';
 
 import { getNumberRange } from './getNumberRange';
 

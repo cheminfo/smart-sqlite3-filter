@@ -1,8 +1,8 @@
-import { Database } from 'better-sqlite3';
-import { Logger } from 'cheminfo-types';
+import type { Database } from 'better-sqlite3';
+import type { Logger } from 'cheminfo-types';
 
-import { Schema } from './types/Schema';
-import { TableInfo } from './types/TableInfo';
+import type { Schema } from './types/Schema';
+import type { TableInfo } from './types/TableInfo';
 import { appendSQLForCriteria } from './utils/appendSQLForCriteria';
 import { parseQueryString } from './utils/parseQueryString';
 

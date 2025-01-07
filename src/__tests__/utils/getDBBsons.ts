@@ -1,4 +1,5 @@
-import sqLite, { Database } from 'better-sqlite3';
+import type { Database } from 'better-sqlite3';
+import sqLite from 'better-sqlite3';
 
 export function getDBBsons(): Database {
   const db = sqLite(':memory:');
