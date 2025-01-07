@@ -1,4 +1,5 @@
 import { Logger } from 'cheminfo-types';
+import { parseString } from 'dynamic-typing';
 
 import { QueryCriterium } from '../types/QueryCriterium';
 import { Schema } from '../types/Schema';
@@ -61,8 +62,15 @@ function buildSQL(
   options: AppendSQLForCriteriaOptions,
 ) {
   const sql = [];
-  for (const field of criterium.fields) {
-    const column = schema[field];
+  for (let field of criterium.fields) {
+    let column;
+    let jpath; // in the case of a BSON
+    const parts = field.split('.');
+    if (parts.length > 1) {
+      field = parts[0];
+      jpath = parts.slice(1).join('.');
+    }
+    column = schema[field];
 
     switch (column.type) {
       case 'TEXT':
@@ -92,6 +100,13 @@ function buildSQL(
         }
         break;
       case 'BLOB':
+        {
+          const newSQL = processBlob(field, criterium, jpath, values, options);
+          if (newSQL) {
+            sql.push(newSQL);
+          }
+        }
+        break;
       case 'NULL':
         break;
       default:
@@ -139,6 +154,71 @@ function processText(field: string, criterium: QueryCriterium, values: Values) {
   return `(${sqls.join(' OR ')})`;
 }
 
+function processBlob(
+  field: string,
+  criterium: QueryCriterium,
+  jpath: string,
+  values: Values,
+  options: AppendSQLForCriteriaOptions,
+) {
+  const { logger } = options;
+  const joinOperator = 'OR';
+  if (!jpath) {
+    logger?.info('JPath is mandatory for BLOB as it is expected to be a BSON');
+    return '';
+  }
+  const sqls = [];
+  for (let valueIndex = 0; valueIndex < criterium.values.length; valueIndex++) {
+    const value = parseString(criterium.values[valueIndex]);
+
+    let sql;
+    switch (typeof value) {
+      case 'string':
+        sql = processText(
+          field,
+          getCriteriumWithOneValue(criterium, valueIndex),
+          values,
+        );
+        break;
+      case 'number':
+        sql = processNumber(
+          field,
+          getCriteriumWithOneValue(criterium, valueIndex),
+          values,
+          options,
+        );
+        break;
+      case 'boolean':
+        sql = processBoolean(
+          field,
+          getCriteriumWithOneValue(criterium, valueIndex),
+          values,
+          options,
+        );
+        break;
+      default:
+        logger?.info(`Invalid value for BLOB: ${criterium.values[valueIndex]}`);
+        continue;
+    }
+    console.log({ sql });
+    if (!sql) {
+      continue;
+    }
+    sqls.push(sql);
+  }
+  if (sqls.length === 0) {
+    return '';
+  }
+  return `(${sqls.join(` ${joinOperator} `)})`;
+}
+
+function getCriteriumWithOneValue(criterium: QueryCriterium, index: number) {
+  return {
+    ...criterium,
+    values: [criterium.values[index]],
+  };
+}
+
 function processNumber(
   field: string,
   criterium: QueryCriterium,
@@ -177,7 +257,7 @@ function processNumber(
         {
           const [min, max] = value.split('..').map(Number);
           if (Number.isNaN(min) || Number.isNaN(max)) {
-            if (logger) logger.info(`Invalid range for ${field}: ${value}`);
+            logger?.info(`Invalid range for ${field}: ${value}`);
             continue;
           }
           values[`${valueFieldName}_min`] = min;
