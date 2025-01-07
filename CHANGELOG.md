@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/cheminfo/smart-sqlite3-filter/compare/v0.3.0...v0.4.0) (2025-01-07)
+
+
+### Features
+
+* add logger level debug with SQL statement ([43e3661](https://github.com/cheminfo/smart-sqlite3-filter/commit/43e36610668b482564e4839a17459267ed774d71))
+
 ## [0.3.0](https://github.com/cheminfo/smart-sqlite3-filter/compare/v0.2.0...v0.3.0) (2024-07-24)
 
 
