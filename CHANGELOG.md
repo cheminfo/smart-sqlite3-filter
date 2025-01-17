@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/cheminfo/smart-sqlite3-filter/compare/v0.4.0...v0.5.0) (2025-01-17)
+
+
+### Features
+
+* add bsons search ([d061cbd](https://github.com/cheminfo/smart-sqlite3-filter/commit/d061cbda1b0995a8b1e59642a843fd97cf42dbff))
+
 ## [0.4.0](https://github.com/cheminfo/smart-sqlite3-filter/compare/v0.3.0...v0.4.0) (2025-01-07)
 
 
