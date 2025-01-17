@@ -51,6 +51,7 @@
     "vitest": "^2.1.8"
   },
   "dependencies": {
-    "cheminfo-types": "^1.8.1"
+    "cheminfo-types": "^1.8.1",
+    "dynamic-typing": "^1.0.1"
   }
 }

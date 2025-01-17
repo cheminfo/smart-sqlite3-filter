@@ -57,7 +57,7 @@ export function search(
     logger,
   } = options;
   const schema = getSchema(db, tableName);
-  let criteria = parseQueryString(queryString);
+  let criteria = parseQueryString(queryString, schema, options);
   const values = appendSQLForCriteria(criteria, schema, options);
   // some criteria may should be removed because they don't have sql property
   criteria = criteria.filter((criterium) => criterium.sql);
@@ -78,7 +78,8 @@ export function search(
   //console.log(values);
 
   logger?.debug(values, `SQL statement: ${sqls.join(' ')}`);
-
+  console.log(sqls);
+  console.log(values);
   const stmt = db.prepare(sqls.join(' '));
   return stmt.all(values) as Entry[];
 }
