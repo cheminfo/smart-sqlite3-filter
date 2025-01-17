@@ -1,8 +1,7 @@
 import type { Database } from 'better-sqlite3';
 import type { Logger } from 'cheminfo-types';
 
-import type { Schema } from './types/Schema';
-import type { TableInfo } from './types/TableInfo';
+import { getSchema } from './getSchema';
 import { appendSQLForCriteria } from './utils/appendSQLForCriteria';
 import { parseQueryString } from './utils/parseQueryString';
 
@@ -78,8 +77,6 @@ export function search(
   //console.log(values);
 
   logger?.debug(values, `SQL statement: ${sqls.join(' ')}`);
-  console.log(sqls);
-  console.log(values);
   const stmt = db.prepare(sqls.join(' '));
   return stmt.all(values) as Entry[];
 }
@@ -106,15 +103,4 @@ function getTableName(db: Database): string {
     );
   }
   return tables[0].name;
-}
-
-function getSchema(db: Database, tableName: string): Schema {
-  const stmt = db.prepare(`PRAGMA table_info(${tableName})`);
-  const tableInfo = stmt.all() as TableInfo[];
-
-  const schema: Schema = {};
-  for (const column of tableInfo) {
-    schema[column.name] = column;
-  }
-  return schema;
 }

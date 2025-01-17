@@ -7,7 +7,6 @@ export function processText(
   criterium: QueryCriterium,
   values: Values,
 ) {
-  console.log(criterium.values);
   const operator = criterium.operator || '^';
   const sqls = [];
   for (let valueIndex = 0; valueIndex < criterium.values.length; valueIndex++) {

@@ -12,10 +12,10 @@ test('names', () => {
     ('Alice', 2000),
     ('Bob', 1990);
   */
-  //expect(search('name:$e,n', db)).toHaveLength(2);
-  //expect(search('year:1990,2000 name:$e,n', db)).toHaveLength(2);
-  // expect(search('bson.year:1990', db)).toHaveLength(2);
-  //expect(search('bson.name:$e', db)).toHaveLength(2);
-  expect(search('bson.name:$e,n', db)).toHaveLength(2);
-  //expect(search('bson.year:1990,2000 bson.name:$e,n', db)).toHaveLength(2);
+  expect(search('name:$e,n', db)).toHaveLength(3);
+  expect(search('year:1990,2000 name:$e,n', db)).toHaveLength(2);
+  expect(search('bson.year:1990', db)).toHaveLength(2);
+  expect(search('bson.name:$e', db)).toHaveLength(2);
+  expect(search('bson.name:$e,n', db)).toHaveLength(3);
+  expect(search('bson.year:1990,2000 bson.name:$e,n', db)).toHaveLength(2);
 });

@@ -81,7 +81,7 @@ function buildSQL(
         break;
       default:
         throw new Error(
-          `Type ${column.type} is not supported. Consider using STRICT mode to avoid issues. The following types are supported: TEXT, REAL, INTEGER, BOOLEAN`,
+          `Type ${parameter.type} is not supported. Consider using STRICT mode to avoid issues. The following types are supported: TEXT, REAL, INTEGER, BOOLEAN`,
         );
     }
   }

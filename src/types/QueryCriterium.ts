@@ -11,7 +11,7 @@ export interface QueryCriterium {
   parameters: Parameter[];
   operator: string;
   values: string[];
-  valuesType?: 'number' | 'string' | 'boolean';
+  valuesType: string;
   negate: boolean;
   sql?: string;
 }

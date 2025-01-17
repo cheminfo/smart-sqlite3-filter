@@ -1,8 +1,9 @@
+import { parseString } from 'dynamic-typing';
+
 import type { Parameter, QueryCriterium } from '../types/QueryCriterium';
 import type { Schema } from '../types/Schema';
 
 import { splitString } from './splitString';
-import { trimQuotes } from './trimQuotes';
 
 interface ParseQueryStringOptions {
   fieldsAliases?: Record<string, string[]>;
@@ -59,17 +60,17 @@ export function parseQueryString(
       operator = '..';
     }
 
-    const values = splitString(token, { delimiter: ',' });
-    token = trimQuotes(token);
+    const { values, valuesType } = getValuesInfo(token);
     queryCriteria.push({
       parameters,
       operator,
       values,
+      valuesType,
       negate,
       index: index++,
     });
   }
-  // if no values
+  // if no values we remove the criterium
   return queryCriteria.filter((criterium) => criterium.values.length > 0);
 }
 
@@ -116,4 +117,26 @@ function getParameters(
   }
 
   return parameters;
+}
+
+function getValuesInfo(string: string) {
+  const values = splitString(string, { delimiter: ',' });
+
+  // need to deal with the special operator '..' for numbers range
+  const allValues = values.flatMap((value) => value.split('..'));
+
+  const valuesKinds = allValues.map((value) => typeof parseString(value));
+  if (valuesKinds.every((kind) => kind === 'boolean')) {
+    return {
+      values,
+      valuesType: 'boolean',
+    };
+  }
+  if (valuesKinds.every((kind) => kind === 'number')) {
+    return {
+      values,
+      valuesType: 'number',
+    };
+  }
+  return { values, valuesType: 'string' };
 }

@@ -2,9 +2,9 @@ import { trimQuotes } from './trimQuotes';
 
 /**
  * Split a string by a delimiter, but ignore delimiters inside quotes.
- * @param string
- * @param options
- * @param options.delimiter
+ * @param string - The string to split
+ * @param [options={}] - Options
+ * @param [options.delimiter=/\s/] - The delimiter to split by
  * @returns An array of strings
  */
 export function splitString(
