@@ -42,7 +42,7 @@ function buildSQL(
 ) {
   const sql = [];
   for (const parameter of criterium.parameters) {
-    switch (parameter.type) {
+    switch (parameter.type.toUpperCase()) {
       case 'TEXT':
         {
           const newSQL = processText(parameter, criterium, values);
@@ -52,6 +52,7 @@ function buildSQL(
         }
         break;
       case 'REAL':
+      case 'FLOAT':
       case 'INT':
       case 'INTEGER':
         {
