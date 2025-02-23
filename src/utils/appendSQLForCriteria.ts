@@ -102,6 +102,7 @@ function getType(type: string) {
   if (type.includes('REAL')) return 'REAL';
   if (type.includes('FLOA')) return 'REAL';
   if (type.includes('DOUB')) return 'REAL';
-
+  if (type.includes('BOOL')) return 'BOOLEAN';
+  if (type.includes('DATE')) return 'DATE';
   return 'NUMERIC';
 }
