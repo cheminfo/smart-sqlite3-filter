@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/cheminfo/smart-sqlite3-filter/compare/v0.5.0...v0.6.0) (2025-02-23)
+
+
+### Features
+
+* allow column types with any case ([#9](https://github.com/cheminfo/smart-sqlite3-filter/issues/9)) ([b000810](https://github.com/cheminfo/smart-sqlite3-filter/commit/b000810e764fa2ec9238ea85cb34db0335183189))
+
 ## [0.5.0](https://github.com/cheminfo/smart-sqlite3-filter/compare/v0.4.0...v0.5.0) (2025-01-17)
 
 
