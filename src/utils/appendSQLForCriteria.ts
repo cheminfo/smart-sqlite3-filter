@@ -41,7 +41,10 @@ function buildSQL(
   options: AppendSQLForCriteriaOptions,
 ) {
   const sql = [];
+
   for (const parameter of criterium.parameters) {
+    const type = getType(parameter.type.toUpperCase());
+
     switch (parameter.type.toUpperCase()) {
       case 'TEXT':
         {
@@ -52,8 +55,6 @@ function buildSQL(
         }
         break;
       case 'REAL':
-      case 'FLOAT':
-      case 'INT':
       case 'INTEGER':
         {
           const newSQL = processNumber(parameter, criterium, values, options);
@@ -90,4 +91,17 @@ function buildSQL(
     return '';
   }
   return `(${sql.join(' OR ')})`;
+}
+
+function getType(type: string) {
+  if (type.includes('INT')) return 'INTEGER';
+  if (type.includes('CHAR')) return 'TEXT';
+  if (type.includes('CLOB')) return 'TEXT';
+  if (type.includes('TEXT')) return 'TEXT';
+  if (type.includes('BLOB')) return 'BLOB';
+  if (type.includes('REAL')) return 'REAL';
+  if (type.includes('FLOA')) return 'REAL';
+  if (type.includes('DOUB')) return 'REAL';
+
+  return 'NUMERIC';
 }
