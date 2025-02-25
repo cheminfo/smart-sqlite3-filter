@@ -56,9 +56,11 @@ test('errors', () => {
   expect(() => search('stringColumn:>""', db)).toThrow(
     'Field stringColumn does not exist in the schema',
   );
-
   expect(() => search('textColumn:>""', db)).toThrow(
     'Operator > is not supported for String',
+  );
+  expect(() => search('textColumn.ab:""', db)).toThrow(
+    "Field textColumn is not a BLOB, you can't use jpath",
   );
 });
 

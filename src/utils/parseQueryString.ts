@@ -75,17 +75,22 @@ export function parseQueryString(
 }
 
 function getParameters(
-  parts: string[],
+  columns: string[],
   schema: Schema,
   fieldsAliases: Record<string, string[]>,
 ): Parameter[] {
-  parts = parts.map((part) => part.trim());
+  columns = columns.map((part) => part.trim());
   const parameters = [];
-  for (const part of parts) {
-    const jpaths = fieldsAliases[part] || [part];
+  for (const column of columns) {
+    const jpaths = fieldsAliases[column] || [column];
     for (const jpath of jpaths) {
+      if (!jpath.match(/^[a-zA-Z0-9_.]+$/)) {
+        // we only allow alphanumeric characters and underscore
+        throw new Error(`Invalid column name: ${column}`);
+      }
       const parts = jpath.split('.');
       if (parts.length === 1) {
+        // we search for a specific column, not a jpath
         if (!schema[jpath]) {
           throw new Error(`Field ${jpath} does not exist in the schema`);
         }
@@ -102,6 +107,7 @@ function getParameters(
         });
       } else {
         const column = parts[0];
+        // we search for a jpath, the first part is the column name
         if (!schema[column]) {
           throw new Error(`Field ${column} does not exist in the schema`);
         }

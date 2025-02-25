@@ -18,4 +18,9 @@ test('names', () => {
   expect(search('bson.name:$e', db)).toHaveLength(2);
   expect(search('bson.name:$e,n', db)).toHaveLength(3);
   expect(search('bson.year:1990,2000 bson.name:$e,n', db)).toHaveLength(2);
+
+  expect(search('bson.ab:n', db)).toHaveLength(0);
+  expect(() => search(`bson.ab$cd:""`, db)).toThrow(
+    'Invalid column name: bson.ab$cd',
+  );
 });
