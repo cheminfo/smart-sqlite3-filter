@@ -17,7 +17,8 @@ export interface AppendSQLForCriteriaOptions {
 }
 
 /**
- *
+ * For each criterium, we will append the corresponding SQL part
+ * based on the type of the parameters
  * @param criteria
  * @param schema
  * @param options
@@ -42,7 +43,9 @@ function buildSQL(
 ) {
   const sql = [];
   for (const parameter of criterium.parameters) {
-    switch (parameter.type.toUpperCase()) {
+    const type = getType(parameter.type.toUpperCase());
+
+    switch (type) {
       case 'TEXT':
         {
           const newSQL = processText(parameter, criterium, values);
@@ -52,8 +55,6 @@ function buildSQL(
         }
         break;
       case 'REAL':
-      case 'FLOAT':
-      case 'INT':
       case 'INTEGER':
         {
           const newSQL = processNumber(parameter, criterium, values, options);
@@ -90,4 +91,24 @@ function buildSQL(
     return '';
   }
   return `(${sql.join(' OR ')})`;
+}
+
+/**
+ * We use similar rules as SQLite type affinity
+ * @see https://sqlite.org/datatype3.html
+ * @param type
+ * @returns
+ */
+function getType(type: string) {
+  if (type.includes('INT')) return 'INTEGER';
+  if (type.includes('CHAR')) return 'TEXT';
+  if (type.includes('CLOB')) return 'TEXT';
+  if (type.includes('TEXT')) return 'TEXT';
+  if (type.includes('BLOB')) return 'BLOB';
+  if (type.includes('REAL')) return 'REAL';
+  if (type.includes('FLOA')) return 'REAL';
+  if (type.includes('DOUB')) return 'REAL';
+  if (type.includes('BOOL')) return 'BOOLEAN';
+
+  return 'NULL';
 }
