@@ -19,9 +19,10 @@ export interface AppendSQLForCriteriaOptions {
 /**
  * For each criterium, we will append the corresponding SQL part
  * based on the type of the parameters
- * @param criteria
- * @param schema
- * @param options
+ * @param criteria - array of query criteria
+ * @param schema - the schema of the database
+ * @param options - options to customize the parsing
+ * @returns the values to bind to the SQL STMT
  */
 export function appendSQLForCriteria(
   criteria: QueryCriterium[],
@@ -96,7 +97,7 @@ function buildSQL(
 /**
  * We use similar rules as SQLite type affinity
  * @see https://sqlite.org/datatype3.html
- * @param type
+ * @param type - the type of the column as described in the schema
  * @returns
  */
 function getType(type: string) {

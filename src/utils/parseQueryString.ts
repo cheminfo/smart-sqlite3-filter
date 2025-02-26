@@ -11,10 +11,10 @@ interface ParseQueryStringOptions {
 }
 
 /**
- *
- * @param string
- * @param schema
- * @param options
+ * Parse a query string and return an array of query criteria
+ * @param string - the query string
+ * @param schema - the schema of the database
+ * @param options - options to customize the parsing
  * @returns array of query criteria
  */
 export function parseQueryString(

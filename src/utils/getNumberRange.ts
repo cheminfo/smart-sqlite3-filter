@@ -1,9 +1,10 @@
 /**
  * Will return the range for a number that allows to consider
  * that the last digit is not significant
- * @param value
+ * @param value - the number as a string in order to keep the precision
+ * @returns the range
  */
-export function getNumberRange(value: string) {
+export function getNumberRange(value: string): { min: number; max: number } {
   const number = Number(value);
   if (Number.isNaN(number)) {
     return { min: Number.NaN, max: Number.NaN };

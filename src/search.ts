@@ -8,7 +8,7 @@ import { parseQueryString } from './utils/parseQueryString';
 export interface SearchOptions {
   /**
    * Specify the order of the results
-   * @default: ''
+   * @default ''
    */
   orderBy?: string;
   /**
@@ -39,9 +39,9 @@ export type Entry = Record<string, number | string>;
 
 /**
  * Search the database for the given query string
- * @param queryString
- * @param db
- * @param options
+ * @param queryString - the query string
+ * @param db - the database to search
+ * @param options - options to customize the search
  * @returns The results of the search
  */
 export function search(
