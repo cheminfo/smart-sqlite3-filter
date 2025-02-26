@@ -9,6 +9,8 @@ This package allows to query a sqlite3 database using better-sqlite3 in a way li
 
 ## Development on Apple Silicon
 
+If you npm configuration contains `ignore-scripts=true` you may have to execute the following commands:
+
 ```bash
 cd node_modules/better-sqlite3
 npm run build-release
