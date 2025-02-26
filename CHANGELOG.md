@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.7.0](https://github.com/cheminfo/smart-sqlite3-filter/compare/v0.6.0...v0.7.0) (2025-02-26)
+
+
+### Features
+
+* generalize mapping of column types ([efc28f9](https://github.com/cheminfo/smart-sqlite3-filter/commit/efc28f9f42ffdb533677acc4c7c718eee85e753b))
+
+
+### Bug Fixes
+
+* possible SQL injection in jpath query ([a0924fa](https://github.com/cheminfo/smart-sqlite3-filter/commit/a0924fa4d5a23634e9c6154c9e5d41570103bfd9))
+
 ## [0.6.0](https://github.com/cheminfo/smart-sqlite3-filter/compare/v0.5.0...v0.6.0) (2025-02-23)
 
 
