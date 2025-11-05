@@ -1,10 +1,10 @@
-import type { Parameter, QueryCriterium } from '../types/QueryCriterium';
+import type { Parameter, QueryCriterium } from '../types/QueryCriterium.ts';
 
 import type {
   AppendSQLForCriteriaOptions,
   Values,
-} from './appendSQLForCriteria';
-import { getNumberRange } from './getNumberRange';
+} from './appendSQLForCriteria.ts';
+import { getNumberRange } from './getNumberRange.ts';
 
 export function processNumber(
   parameter: Parameter,

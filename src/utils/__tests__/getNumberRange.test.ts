@@ -1,7 +1,7 @@
 import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to';
 import { expect, test } from 'vitest';
 
-import { getNumberRange } from '../getNumberRange';
+import { getNumberRange } from '../getNumberRange.ts';
 
 expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 

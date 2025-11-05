@@ -1,12 +1,12 @@
 import type { Logger } from 'cheminfo-types';
 
-import type { QueryCriterium } from '../types/QueryCriterium';
-import type { Schema } from '../types/Schema';
+import type { QueryCriterium } from '../types/QueryCriterium.ts';
+import type { Schema } from '../types/Schema.ts';
 
-import { processBlob } from './processBlob';
-import { processBoolean } from './processBoolean';
-import { processNumber } from './processNumber';
-import { processText } from './processText';
+import { processBlob } from './processBlob.ts';
+import { processBoolean } from './processBoolean.ts';
+import { processNumber } from './processNumber.ts';
+import { processText } from './processText.ts';
 
 export type Values = Record<string, number | string>;
 

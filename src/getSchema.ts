@@ -1,7 +1,7 @@
 import type { Database } from 'better-sqlite3';
 
-import type { Schema } from './types/Schema';
-import type { TableInfo } from './types/TableInfo';
+import type { Schema } from './types/Schema.ts';
+import type { TableInfo } from './types/TableInfo.ts';
 
 export function getSchema(db: Database, tableName: string): Schema {
   const stmt = db.prepare(`PRAGMA table_info(${tableName})`);

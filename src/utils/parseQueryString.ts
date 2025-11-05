@@ -1,9 +1,9 @@
 import { parseString } from 'dynamic-typing';
 
-import type { Parameter, QueryCriterium } from '../types/QueryCriterium';
-import type { Schema } from '../types/Schema';
+import type { Parameter, QueryCriterium } from '../types/QueryCriterium.ts';
+import type { Schema } from '../types/Schema.ts';
 
-import { splitString } from './splitString';
+import { splitString } from './splitString.ts';
 
 interface ParseQueryStringOptions {
   fieldsAliases?: Record<string, string[]>;

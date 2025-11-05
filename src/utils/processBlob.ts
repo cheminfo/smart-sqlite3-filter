@@ -1,12 +1,12 @@
-import type { Parameter, QueryCriterium } from '../types/QueryCriterium';
+import type { Parameter, QueryCriterium } from '../types/QueryCriterium.ts';
 
 import type {
   AppendSQLForCriteriaOptions,
   Values,
-} from './appendSQLForCriteria';
-import { processBoolean } from './processBoolean';
-import { processNumber } from './processNumber';
-import { processText } from './processText';
+} from './appendSQLForCriteria.ts';
+import { processBoolean } from './processBoolean.ts';
+import { processNumber } from './processNumber.ts';
+import { processText } from './processText.ts';
 
 export function processBlob(
   parameter: Parameter,
@@ -24,5 +24,6 @@ export function processBlob(
       return processBoolean(parameter, criterium, values, options);
     default:
       logger?.info(`Invalid values for BLOB: ${criterium.values.toString()}`);
+      return undefined;
   }
 }

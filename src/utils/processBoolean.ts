@@ -1,9 +1,9 @@
-import type { Parameter, QueryCriterium } from '../types/QueryCriterium';
+import type { Parameter, QueryCriterium } from '../types/QueryCriterium.ts';
 
 import type {
   AppendSQLForCriteriaOptions,
   Values,
-} from './appendSQLForCriteria';
+} from './appendSQLForCriteria.ts';
 
 export function processBoolean(
   parameter: Parameter,

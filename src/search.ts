@@ -1,9 +1,9 @@
 import type { Database } from 'better-sqlite3';
 import type { Logger } from 'cheminfo-types';
 
-import { getSchema } from './getSchema';
-import { appendSQLForCriteria } from './utils/appendSQLForCriteria';
-import { parseQueryString } from './utils/parseQueryString';
+import { getSchema } from './getSchema.ts';
+import { appendSQLForCriteria } from './utils/appendSQLForCriteria.ts';
+import { parseQueryString } from './utils/parseQueryString.ts';
 
 export interface SearchOptions {
   /**

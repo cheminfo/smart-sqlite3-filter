@@ -1,6 +1,6 @@
-import type { Parameter, QueryCriterium } from '../types/QueryCriterium';
+import type { Parameter, QueryCriterium } from '../types/QueryCriterium.ts';
 
-import type { Values } from './appendSQLForCriteria';
+import type { Values } from './appendSQLForCriteria.ts';
 
 export function processText(
   parameter: Parameter,

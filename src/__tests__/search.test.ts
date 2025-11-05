@@ -2,9 +2,9 @@
 import { FifoLogger } from 'fifo-logger';
 import { expect, test } from 'vitest';
 
-import { search } from '../search';
+import { search } from '../search.ts';
 
-import { getDB } from './utils/getDB';
+import { getDB } from './utils/getDB.ts';
 
 test('text', () => {
   const db = getDB();
