@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest';
 
-import { search } from '../search';
+import { search } from '../search.ts';
 
-import { getDBNames } from './utils/getDBNames';
+import { getDBNames } from './utils/getDBNames.ts';
 
 test('names', () => {
   const db = getDBNames();

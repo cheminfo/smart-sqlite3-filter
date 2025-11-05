@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest';
 
-import { getDB } from '../../__tests__/utils/getDB';
-import { getSchema } from '../../getSchema';
-import { parseQueryString } from '../parseQueryString';
+import { getDB } from '../../__tests__/utils/getDB.ts';
+import { getSchema } from '../../getSchema.ts';
+import { parseQueryString } from '../parseQueryString.ts';
 
 test('parseQueryString', () => {
   const db = getDB();

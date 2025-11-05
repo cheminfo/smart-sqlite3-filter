@@ -1,17 +1,17 @@
 {
   "name": "smart-sqlite3-filter",
   "version": "0.7.0",
+  "license": "MIT",
   "description": "Query a sqlite3 database using better-sqlite3 in a way like 'firstName:luc'.",
-  "main": "./lib/index.js",
-  "module": "./lib-esm/index.js",
-  "types": "./lib/index.d.ts",
   "keywords": [],
   "author": "Luc Patiny",
-  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./lib/index.js"
+  },
   "files": [
-    "src",
     "lib",
-    "lib-esm"
+    "src"
   ],
   "scripts": {
     "check-types": "tsc --noEmit",
@@ -21,11 +21,10 @@
     "prepack": "npm run tsc",
     "prettier": "prettier --check src",
     "prettier-write": "prettier --write src",
-    "test": "npm run test-only && npm run eslint && npm run prettier && npm run check-types",
-    "test-only": "vitest --coverage",
-    "tsc": "npm run clean && npm run tsc-cjs && npm run tsc-esm",
-    "tsc-cjs": "tsc --project tsconfig.cjs.json",
-    "tsc-esm": "tsc --project tsconfig.esm.json"
+    "test": "npm run test-only && npm run check-types && npm run eslint && npm run prettier",
+    "test-only": "vitest run --coverage",
+    "tsc": "npm run clean && npm run tsc-build",
+    "tsc-build": "tsc --project tsconfig.build.json"
   },
   "repository": {
     "type": "git",
@@ -40,6 +39,7 @@
     "@babel/preset-typescript": "^7.28.5",
     "@types/better-sqlite3": "^7.6.13",
     "@vitest/coverage-v8": "^4.0.7",
+    "@zakodium/tsconfig": "^1.0.2",
     "better-sqlite3": "^12.4.1",
     "eslint": "^9.39.1",
     "eslint-config-cheminfo-typescript": "^20.0.0",

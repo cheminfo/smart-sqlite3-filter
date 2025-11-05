@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { splitString } from '../splitString';
+import { splitString } from '../splitString.ts';
 
 test('splitString', () => {
   expect(splitString('abc')).toStrictEqual(['abc']);

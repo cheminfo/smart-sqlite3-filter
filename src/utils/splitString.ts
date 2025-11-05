@@ -1,4 +1,4 @@
-import { trimQuotes } from './trimQuotes';
+import { trimQuotes } from './trimQuotes.ts';
 
 /**
  * Split a string by a delimiter, but ignore delimiters inside quotes.
