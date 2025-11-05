@@ -35,8 +35,6 @@
   },
   "homepage": "https://github.com/cheminfo/smart-sqlite3-filter#readme",
   "devDependencies": {
-    "@babel/plugin-transform-modules-commonjs": "^7.27.1",
-    "@babel/preset-typescript": "^7.28.5",
     "@types/better-sqlite3": "^7.6.13",
     "@vitest/coverage-v8": "^4.0.7",
     "@zakodium/tsconfig": "^1.0.2",
