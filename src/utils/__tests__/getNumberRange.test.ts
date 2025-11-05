@@ -8,9 +8,9 @@ expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 test('getNumberRange', () => {
   // const result = getNumberRange('-10e-2');
   // console.log(result);
-  expect(getNumberRange('1')).toEqual({ min: 0.5, max: 1.5 });
-  expect(getNumberRange('5')).toEqual({ min: 4.5, max: 5.5 });
-  expect(getNumberRange('10')).toEqual({ min: 9.5, max: 10.5 });
+  expect(getNumberRange('1')).toStrictEqual({ min: 0.5, max: 1.5 });
+  expect(getNumberRange('5')).toStrictEqual({ min: 4.5, max: 5.5 });
+  expect(getNumberRange('10')).toStrictEqual({ min: 9.5, max: 10.5 });
   expect(getNumberRange('10.0')).toBeDeepCloseTo({ min: 9.95, max: 10.05 });
   expect(getNumberRange('10.01')).toBeDeepCloseTo({ min: 10.005, max: 10.015 });
   expect(getNumberRange('0.1')).toBeDeepCloseTo({ min: 0.05, max: 0.15 });

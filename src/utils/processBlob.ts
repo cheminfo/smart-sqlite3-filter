@@ -1,8 +1,8 @@
 import type { Parameter, QueryCriterium } from '../types/QueryCriterium';
 
 import type {
-  Values,
   AppendSQLForCriteriaOptions,
+  Values,
 } from './appendSQLForCriteria';
 import { processBoolean } from './processBoolean';
 import { processNumber } from './processNumber';

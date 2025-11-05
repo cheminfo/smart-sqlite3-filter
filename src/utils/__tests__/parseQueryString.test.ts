@@ -1,4 +1,4 @@
-import { test, expect } from 'vitest';
+import { expect, test } from 'vitest';
 
 import { getDB } from '../../__tests__/utils/getDB';
 import { getSchema } from '../../getSchema';
@@ -8,6 +8,7 @@ test('parseQueryString', () => {
   const db = getDB();
   const schema = getSchema(db, 'entries');
   const result = parseQueryString('textColumn:abc', schema);
+
   expect(result).toStrictEqual([
     {
       parameters: [

@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { FifoLogger } from 'fifo-logger';
-import { test, expect } from 'vitest';
+import { expect, test } from 'vitest';
 
 import { search } from '../search';
 
@@ -8,6 +8,7 @@ import { getDB } from './utils/getDB';
 
 test('text', () => {
   const db = getDB();
+
   expect(search('text-12', db)).toHaveLength(2);
   expect(search('textColumn:text-1', db)).toHaveLength(22);
   expect(search('textColumn:=text-1', db)).toHaveLength(1);
@@ -24,6 +25,7 @@ test('text', () => {
 
 test('text multiple values', () => {
   const db = getDB();
+
   expect(search('textColumn:text-1,text-2', db)).toHaveLength(44);
   expect(search('textColumn:=text-1,text-2', db)).toHaveLength(2);
   expect(search('textColumn:$text-1,text-2', db)).toHaveLength(4);
@@ -32,6 +34,7 @@ test('text multiple values', () => {
 
 test('number', () => {
   const db = getDB();
+
   expect(search('numberColumn:1', db)).toHaveLength(2);
   expect(search('numberColumn:1,2,3', db)).toHaveLength(6);
   expect(search('numberColumn:=1', db)).toHaveLength(2);
@@ -45,11 +48,13 @@ test('orderBy', () => {
   const result = search('numberColumn:1,2,3', db, {
     orderBy: 'numberColumn DESC',
   }).map((entry) => entry.numberColumn);
-  expect(result).toEqual([3, 3, 2, 2, 1, 1]);
+
+  expect(result).toStrictEqual([3, 3, 2, 2, 1, 1]);
 });
 
 test('errors', () => {
   const db = getDB();
+
   expect(() => search('numberColumn:>1,2', db)).toThrow(
     'Number does not support multiple values',
   );
@@ -68,10 +73,13 @@ test('logger', () => {
   const db = getDB();
   const logger1 = new FifoLogger();
   search('textColumn:text-1', db, { logger: logger1 });
+
   expect(logger1.getLogs()).toHaveLength(0);
+
   const logger2 = new FifoLogger({ level: 'debug' });
   search('textColumn:text-1', db, { logger: logger2 });
   const logs = logger2.getLogs();
+
   expect(logs).toHaveLength(1);
   expect(logs[0].message).toBe(
     'SQL statement: SELECT * FROM entries WHERE ((textColumn LIKE :textColumn_0_0)) LIMIT 1000',

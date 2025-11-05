@@ -1,4 +1,4 @@
-import { test, expect } from 'vitest';
+import { expect, test } from 'vitest';
 
 import { search } from '../search';
 
@@ -6,6 +6,7 @@ import { getDBBsons } from './utils/getDBBsons';
 
 test('names', () => {
   const db = getDBBsons();
+
   /*
     ('John', 1990),
     ('Jane', 1985),
