@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.8.0](https://github.com/cheminfo/smart-sqlite3-filter/compare/v0.7.0...v0.8.0) (2026-03-31)
+
+
+### ⚠ BREAKING CHANGES
+
+* migrate to native module ([#17](https://github.com/cheminfo/smart-sqlite3-filter/issues/17))
+
+### Features
+
+* migrate to native module ([#17](https://github.com/cheminfo/smart-sqlite3-filter/issues/17)) ([9c0634b](https://github.com/cheminfo/smart-sqlite3-filter/commit/9c0634b90798052bccda03d1018557c6edbdc2df))
+
+
+### Bug Fixes
+
+* update dynamic-typing dependency ([#19](https://github.com/cheminfo/smart-sqlite3-filter/issues/19)) ([a63b193](https://github.com/cheminfo/smart-sqlite3-filter/commit/a63b193df5fc8d04e571245994337889188e26b7))
+
 ## [0.7.0](https://github.com/cheminfo/smart-sqlite3-filter/compare/v0.6.0...v0.7.0) (2025-02-26)
 
 
