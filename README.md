@@ -5,15 +5,14 @@
 [![Test coverage][codecov-image]][codecov-url]
 [![npm download][download-image]][download-url]
 
-This package allows to query a sqlite3 database using better-sqlite3 in a way like 'firstName:luc'.
+This package allows querying a sqlite3 database using better-sqlite3 in a way like 'firstName:luc'.
 
 ## Development on Apple Silicon
 
-If you npm configuration contains `ignore-scripts=true` you may have to execute the following commands:
+If your npm configuration contains `ignore-scripts=true` you may have to execute the following commands:
 
 ```bash
-cd node_modules/better-sqlite3
-npm run build-release
+npm run allow-scripts
 ```
 
 ## Installation
