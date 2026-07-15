@@ -1,9 +1,7 @@
 import type { Database } from 'better-sqlite3';
 import type { Logger } from 'cheminfo-types';
 
-import { getSchema } from './getSchema.ts';
-import { appendSQLForCriteria } from './utils/appendSQLForCriteria.ts';
-import { parseQueryString } from './utils/parseQueryString.ts';
+import { buildWhere, getTableName } from './buildWhere.ts';
 
 export interface SearchOptions {
   /**
@@ -20,6 +18,19 @@ export interface SearchOptions {
    * @default 1000
    */
   limit?: number;
+  /**
+   * Number of results to skip, for pagination. Requires a `limit`: SQLite has
+   * no OFFSET without LIMIT.
+   * @default 0
+   */
+  from?: number;
+  /**
+   * Columns to return. Defaults to every column (`*`). Naming only the columns
+   * you need avoids reading wide ones (blobs, coordinates) you are going to
+   * throw away.
+   * @default ['*']
+   */
+  columns?: string[];
   /**
    * In which fields to search. If not provided all fields will be searched.
    */
@@ -52,55 +63,62 @@ export function search(
   const {
     tableName = getTableName(db),
     limit = 1000,
+    from = 0,
     orderBy = '',
+    columns = ['*'],
     logger,
   } = options;
-  const schema = getSchema(db, tableName);
-  let criteria = parseQueryString(queryString, schema, options);
-  const values = appendSQLForCriteria(criteria, schema, options);
-  // some criteria may should be removed because they don't have sql property
-  criteria = criteria.filter((criterium) => criterium.sql);
+  // `logger` is deliberately not forwarded: search logs the full statement
+  // below, and buildWhere would log the bare WHERE first.
+  const { where, values } = buildWhere(queryString, db, {
+    ...options,
+    tableName,
+    logger: undefined,
+  });
 
-  const sqls: string[] = [];
-  sqls.push(`SELECT * FROM ${tableName}`);
-  if (criteria.length > 0) {
-    sqls.push(
-      `WHERE ${criteria.map((criterium) => criterium.sql).join(' AND ')}`,
-    );
+  const sqls: string[] = [`SELECT ${columns.join(', ')} FROM ${tableName}`];
+  if (where) {
+    sqls.push(`WHERE ${where}`);
   }
   if (orderBy) {
     sqls.push(`ORDER BY ${orderBy}`);
   }
   if (limit) {
     sqls.push(`LIMIT ${limit}`);
+    // OFFSET is only legal after a LIMIT.
+    if (from) {
+      sqls.push(`OFFSET ${from}`);
+    }
   }
-  //console.log(values);
 
   logger?.debug(values, `SQL statement: ${sqls.join(' ')}`);
   const stmt = db.prepare(sqls.join(' '));
   return stmt.all(values) as Entry[];
 }
 
-interface TableList {
-  schema: string;
-  name: string;
-  type: string;
-  ncol: number;
-  wr: number;
-  strict: number;
-}
+/**
+ * Count the entries matching the given query string, ignoring `limit` / `from`.
+ * Pairs with {@link search} when a UI needs the total number of matches
+ * alongside one page of them.
+ * @param queryString - the query string
+ * @param db - the database to search
+ * @param options - options to customize the search
+ * @returns The number of matching entries
+ */
+export function count(
+  queryString: string,
+  db: Database,
+  options: SearchOptions = {},
+): number {
+  const { tableName = getTableName(db), logger } = options;
+  const { where, values } = buildWhere(queryString, db, {
+    ...options,
+    tableName,
+    logger: undefined,
+  });
+  const sql = `SELECT COUNT(*) AS count FROM ${tableName}${where ? ` WHERE ${where}` : ''}`;
 
-function getTableName(db: Database): string {
-  const stmt = db.prepare('PRAGMA table_list');
-  const allTables = stmt.all() as TableList[];
-  const tables = allTables.filter((table) => !table.name.startsWith('sqlite_'));
-  if (tables.length === 0) {
-    throw new Error('Expected at least one table in the database');
-  }
-  if (tables.length > 1) {
-    throw new Error(
-      'There is more than one table in the database, you need to specify the table name',
-    );
-  }
-  return tables[0].name;
+  logger?.debug(values, `SQL statement: ${sql}`);
+  const row = db.prepare(sql).get(values) as { count: number };
+  return row.count;
 }

@@ -73,6 +73,58 @@ search('year:!=1990,2000', db); // [{name: 'Jane', year: 1985}]
 search('year:1980..1987', db); // [{name: 'Jane', year: 1985}]
 ```
 
+## Pagination, columns and totals
+
+`search` accepts `limit` (default 1000), `from` to skip results, and `columns`
+to avoid reading columns you don't need. `count` returns the number of matching
+entries, ignoring `limit` / `from`.
+
+```js
+import { count, search } from 'smart-sqlite3-filter';
+
+search('year:>1985', db, { orderBy: 'name', limit: 2, from: 2 }); // second page
+search('year:>1985', db, { columns: ['name', 'year'] }); // no SELECT *
+count('year:>1985', db); // 3
+```
+
+## Composing with your own statement
+
+`buildWhere` returns the WHERE condition and its bound parameters without
+running anything, so the filter can go inside a statement `search` cannot
+express: your own joins, a subquery, a `COUNT(*)`, a window function, …
+
+The emitted parameters are named, so they merge with your own without colliding
+on position.
+
+```js
+import { buildWhere } from 'smart-sqlite3-filter';
+
+const { where, values } = buildWhere('name:~ester mw:100..500', db, {
+  tableName: 'molecules',
+});
+
+// one page, plus the exact total
+const page = db
+  .prepare(
+    `SELECT id, name, mw FROM molecules WHERE ${where}
+     ORDER BY mw DESC LIMIT :limit OFFSET :offset`,
+  )
+  .all({ ...values, limit: 50, offset: 0 });
+
+const { total } = db
+  .prepare(`SELECT COUNT(*) AS total FROM molecules WHERE ${where}`)
+  .get(values);
+
+// or as a subquery driving a join — nothing is materialised
+db.prepare(
+  `SELECT s.* FROM (SELECT id FROM molecules WHERE ${where}) c
+   JOIN some_index s ON s.entry_id = c.id`,
+).all(values);
+```
+
+`where` is an empty string when the query string carries no criteria, so guard
+it with `` `${where || '1 = 1'}` `` when the query may be empty.
+
 ## Usage with BSON
 
 ```js
