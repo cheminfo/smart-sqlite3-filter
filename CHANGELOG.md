@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.0.0](https://github.com/cheminfo/smart-sqlite3-filter/compare/v0.8.0...v1.0.0) (2026-07-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* the database argument is now a `DatabaseSync` from `node:sqlite` instead of a better-sqlite3 `Database`, and Node.js >= 22.13 is required.
+
+### Features
+
+* add buildWhere, count, and from/columns options to search ([6391e30](https://github.com/cheminfo/smart-sqlite3-filter/commit/6391e30510d9efc97106edd8c37128873ca4f44d))
+* replace better-sqlite3 with the built-in node:sqlite module ([dab8e0e](https://github.com/cheminfo/smart-sqlite3-filter/commit/dab8e0e008e800216adae27e8d9354a9647e9ab1))
+
+
+### Bug Fixes
+
+* keep buildWhere compliant with noUncheckedIndexedAccess ([852315c](https://github.com/cheminfo/smart-sqlite3-filter/commit/852315cd45752a42cfa16dda6f08b3244683145c))
+
 ## [0.8.0](https://github.com/cheminfo/smart-sqlite3-filter/compare/v0.7.0...v0.8.0) (2026-03-31)
 
 
