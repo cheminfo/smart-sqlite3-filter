@@ -1,4 +1,5 @@
-import type { Database } from 'better-sqlite3';
+import type { DatabaseSync } from 'node:sqlite';
+
 import type { Logger } from 'cheminfo-types';
 
 import { getSchema } from './getSchema.ts';
@@ -67,7 +68,7 @@ export interface BuiltWhere {
  */
 export function buildWhere(
   queryString: string,
-  db: Database,
+  db: DatabaseSync,
   options: BuildWhereOptions = {},
 ): BuiltWhere {
   const { tableName = getTableName(db), logger } = options;
@@ -99,9 +100,9 @@ interface TableList {
  * @param db - the database to inspect
  * @returns The only user table in the database
  */
-export function getTableName(db: Database): string {
+export function getTableName(db: DatabaseSync): string {
   const stmt = db.prepare('PRAGMA table_list');
-  const allTables = stmt.all() as TableList[];
+  const allTables = stmt.all() as unknown as TableList[];
   const tables = allTables.filter((table) => !table.name.startsWith('sqlite_'));
   const [table] = tables;
   if (!table) {

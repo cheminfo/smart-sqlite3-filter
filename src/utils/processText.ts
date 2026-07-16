@@ -9,8 +9,7 @@ export function processText(
 ) {
   const operator = criterium.operator || '^';
   const sqls = [];
-  for (let valueIndex = 0; valueIndex < criterium.values.length; valueIndex++) {
-    const value = criterium.values[valueIndex];
+  for (const [valueIndex, value] of criterium.values.entries()) {
     const column = parameter.column;
     const accessor = parameter.accessor;
 

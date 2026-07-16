@@ -18,7 +18,8 @@ export function processBoolean(
     if (logger) logger.info('Boolean does not support multiple values');
     return '';
   }
-  const value = getBooleanValue(criterium.values[0]);
+  const [firstValue = ''] = criterium.values;
+  const value = getBooleanValue(firstValue);
   if (value === null) {
     return '';
   }
@@ -33,12 +34,15 @@ export function processBoolean(
       );
   }
 }
+const TRUE_VALUES = new Set(['true', '1', 'yes']);
+const FALSE_VALUES = new Set(['false', '0', 'no']);
+
 function getBooleanValue(value: string): boolean | null {
-  value = value.toLowerCase();
-  if (value === 'true' || value === '1' || value === 'yes') {
+  const lowerCaseValue = value.toLowerCase();
+  if (TRUE_VALUES.has(lowerCaseValue)) {
     return true;
   }
-  if (value === 'false' || value === '0' || value === 'no') {
+  if (FALSE_VALUES.has(lowerCaseValue)) {
     return false;
   }
   return null;

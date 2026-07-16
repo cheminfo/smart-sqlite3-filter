@@ -18,8 +18,7 @@ export function processNumber(
   const column = parameter.column;
   const accessor = parameter.accessor;
   let joinOperator = 'OR';
-  for (let valueIndex = 0; valueIndex < criterium.values.length; valueIndex++) {
-    const value = criterium.values[valueIndex];
+  for (const [valueIndex, value] of criterium.values.entries()) {
     // is it really a number ? We should skip otherwise
     if (operator !== '..' && Number.isNaN(Number(value))) {
       continue;
@@ -27,35 +26,35 @@ export function processNumber(
     const valueFieldName = `${column}_${criterium.index}_${valueIndex}`;
 
     switch (operator) {
-      case '~':
-        {
-          // we consider by default that a number is not exact by default
-          const { min, max } = getNumberRange(value);
-          values[`${valueFieldName}_min`] = min;
-          values[`${valueFieldName}_max`] = max;
-          sqls.push(
-            `${accessor} BETWEEN :${valueFieldName}_min AND :${valueFieldName}_max`,
-          );
-        }
+      case '~': {
+        // we consider by default that a number is not exact by default
+        const { min, max } = getNumberRange(value);
+        values[`${valueFieldName}_min`] = min;
+        values[`${valueFieldName}_max`] = max;
+        sqls.push(
+          `${accessor} BETWEEN :${valueFieldName}_min AND :${valueFieldName}_max`,
+        );
         break;
+      }
       case '=':
         values[valueFieldName] = Number(value);
         sqls.push(`${accessor} = :${valueFieldName}`);
         break;
-      case '..':
-        {
-          const [min, max] = value.split('..').map(Number);
-          if (Number.isNaN(min) || Number.isNaN(max)) {
-            logger?.info(`Invalid range for ${column}: ${value}`);
-            continue;
-          }
-          values[`${valueFieldName}_min`] = min;
-          values[`${valueFieldName}_max`] = max;
-          sqls.push(
-            `${accessor} BETWEEN :${valueFieldName}_min AND :${valueFieldName}_max`,
-          );
+      case '..': {
+        const [minString, maxString] = value.split('..');
+        const min = Number(minString);
+        const max = Number(maxString);
+        if (Number.isNaN(min) || Number.isNaN(max)) {
+          logger?.info(`Invalid range for ${column}: ${value}`);
+          continue;
         }
+        values[`${valueFieldName}_min`] = min;
+        values[`${valueFieldName}_max`] = max;
+        sqls.push(
+          `${accessor} BETWEEN :${valueFieldName}_min AND :${valueFieldName}_max`,
+        );
         break;
+      }
       case '!=':
       case '<>':
         values[valueFieldName] = Number(value);

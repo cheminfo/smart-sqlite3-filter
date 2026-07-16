@@ -1,8 +1,7 @@
-import type { Database } from 'better-sqlite3';
-import sqLite from 'better-sqlite3';
+import { DatabaseSync } from 'node:sqlite';
 
-export function getDBNames(): Database {
-  const db = sqLite(':memory:');
+export function getDBNames(): DatabaseSync {
+  const db = new DatabaseSync(':memory:');
 
   // create data and add some dummy data
   const sql = `

@@ -1,8 +1,7 @@
-import type { Database } from 'better-sqlite3';
-import sqLite from 'better-sqlite3';
+import { DatabaseSync } from 'node:sqlite';
 
-export function getDB(): Database {
-  const db = sqLite(':memory:');
+export function getDB(): DatabaseSync {
+  const db = new DatabaseSync(':memory:');
 
   const sql = `
     CREATE TABLE IF NOT EXISTS entries (
@@ -18,7 +17,7 @@ export function getDB(): Database {
   return db;
 }
 
-function fillDatabase(db: Database): void {
+function fillDatabase(db: DatabaseSync): void {
   const stmt = db.prepare(
     'INSERT INTO entries (textColumn, numberColumn, booleanColumn) VALUES (?, ?, ?)',
   );

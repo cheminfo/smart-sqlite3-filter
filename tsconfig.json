@@ -1,9 +1,9 @@
 {
   "extends": "@zakodium/tsconfig",
   "compilerOptions": {
-    "types": ["node"],
-    "noUncheckedIndexedAccess": false,
-    "outDir": "lib"
+    "noUncheckedIndexedAccess": true,
+    "outDir": "lib",
+    "types": ["node"]
   },
-  "include": ["src"]
+  "include": ["src", "vite*.ts"]
 }

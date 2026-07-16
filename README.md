@@ -5,32 +5,30 @@
 [![Test coverage][codecov-image]][codecov-url]
 [![npm download][download-image]][download-url]
 
-This package allows querying a sqlite3 database using better-sqlite3 in a way like 'firstName:luc'.
-
-## Development on Apple Silicon
-
-If your npm configuration contains `ignore-scripts=true` you may have to execute the following commands:
-
-```bash
-npm run allow-scripts
-```
+This package allows querying a sqlite3 database using the built-in [`node:sqlite`](https://nodejs.org/api/sqlite.html) module in a way like 'firstName:luc'.
 
 ## Installation
 
 `$ npm i smart-sqlite3-filter`
 
+The database is a `DatabaseSync` instance from Node.js's built-in `node:sqlite`
+module, so there is no native dependency to compile. This requires Node.js
+22.13 or later, the first version exposing `node:sqlite` without the
+`--experimental-sqlite` flag.
+
 ## Usage
 
 ```js
-import { search } from 'smart-sqlite3-filter';
-import sqLite from 'better-sqlite3';
+import { DatabaseSync } from 'node:sqlite';
 
-const db = sqLite(':memory:');
+import { search } from 'smart-sqlite3-filter';
+
+const db = new DatabaseSync(':memory:');
 const sql = `
   CREATE TABLE IF NOT EXISTS names (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    year INTEGER NOT NULL
+    year INTEGER NOT NULL,
     age REAL NOT NULL
   );
 
@@ -46,7 +44,7 @@ db.exec(sql);
 // For string column it is case insensitive and should startWith, for number it should be the exact value
 search('John', db); // [{name: 'John', year: 1990}]
 
-search('1990', db); // [{name: 'John', year: 1990}]
+search('1990', db); // [{name: 'John', year: 1990}, {name: 'Bob', year: 1990}]
 
 search('J', db); // [{name: 'John', year: 1990}, {name: 'Jane', year: 1985}]
 
@@ -61,7 +59,7 @@ search('age:=25', db); // must be exactly 25, 1 hit
 
 // when searching for a string we can use the following operators: '^' (starts with), '$' (ends with), '~' (contains), '='. Default to contains. When searching for '=' it is case sensitive otherwise it is not.
 search('name:~o', db); // [{name: 'John', year: 1990}, {name: 'Bob', year: 1990}]
-search('name:$e', db); // [{name: 'Alice', year: 2000}]
+search('name:$e', db); // [{name: 'Jane', year: 1985}, {name: 'Alice', year: 2000}]
 search('name:^J', db); // [{name: 'John', year: 1990}, {name: 'Jane', year: 1985}]
 
 // A field may have various values separated by ','
@@ -128,10 +126,11 @@ it with `` `${where || '1 = 1'}` `` when the query may be empty.
 ## Usage with BSON
 
 ```js
-import { search } from 'smart-sqlite3-filter';
-import sqLite from 'better-sqlite3';
+import { DatabaseSync } from 'node:sqlite';
 
-const db = sqLite(':memory:');
+import { search } from 'smart-sqlite3-filter';
+
+const db = new DatabaseSync(':memory:');
 
 // create data and add some dummy data
 const sql = `

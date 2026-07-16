@@ -17,7 +17,7 @@ export function splitString(
   let start = 0;
   let quote = '';
   for (let i = 0; i < string.length; i++) {
-    const char = string[i];
+    const char = string.charAt(i);
     if (inQuotes) {
       if (char === quote) {
         inQuotes = false;

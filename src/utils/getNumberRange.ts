@@ -9,7 +9,7 @@ export function getNumberRange(value: string): { min: number; max: number } {
   if (Number.isNaN(number)) {
     return { min: Number.NaN, max: Number.NaN };
   }
-  const [coefficient, power = 0] = value.toLowerCase().split('e');
+  const [coefficient = '', power = 0] = value.toLowerCase().split('e');
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [integer, decimal = ''] = coefficient.split('.');

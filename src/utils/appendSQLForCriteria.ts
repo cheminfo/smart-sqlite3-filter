@@ -47,39 +47,35 @@ function buildSQL(
     const type = getType(parameter.type.toUpperCase());
 
     switch (type) {
-      case 'TEXT':
-        {
-          const newSQL = processText(parameter, criterium, values);
-          if (newSQL) {
-            sql.push(newSQL);
-          }
+      case 'TEXT': {
+        const newSQL = processText(parameter, criterium, values);
+        if (newSQL) {
+          sql.push(newSQL);
         }
         break;
+      }
       case 'REAL':
-      case 'INTEGER':
-        {
-          const newSQL = processNumber(parameter, criterium, values, options);
-          if (newSQL) {
-            sql.push(newSQL);
-          }
+      case 'INTEGER': {
+        const newSQL = processNumber(parameter, criterium, values, options);
+        if (newSQL) {
+          sql.push(newSQL);
         }
         break;
-      case 'BOOLEAN':
-        {
-          const newSQL = processBoolean(parameter, criterium, values, options);
-          if (newSQL) {
-            sql.push(newSQL);
-          }
+      }
+      case 'BOOLEAN': {
+        const newSQL = processBoolean(parameter, criterium, values, options);
+        if (newSQL) {
+          sql.push(newSQL);
         }
         break;
-      case 'BLOB':
-        {
-          const newSQL = processBlob(parameter, criterium, values, options);
-          if (newSQL) {
-            sql.push(newSQL);
-          }
+      }
+      case 'BLOB': {
+        const newSQL = processBlob(parameter, criterium, values, options);
+        if (newSQL) {
+          sql.push(newSQL);
         }
         break;
+      }
       case 'NULL':
         break;
       default:

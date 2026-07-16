@@ -91,10 +91,11 @@ function getParameters(
       const parts = jpath.split('.');
       if (parts.length === 1) {
         // we search for a specific column, not a jpath
-        if (!schema[jpath]) {
+        const schemaColumn = schema[jpath];
+        if (!schemaColumn) {
           throw new Error(`Field ${jpath} does not exist in the schema`);
         }
-        const type = schema[jpath].type;
+        const { type } = schemaColumn;
         if (type === 'BLOB') {
           throw new Error(`Field ${jpath} is a BLOB, you need to use jpath`);
         }
@@ -106,17 +107,18 @@ function getParameters(
           isJpath: false,
         });
       } else {
-        const column = parts[0];
+        const [column = ''] = parts;
         // we search for a jpath, the first part is the column name
-        if (!schema[column]) {
+        const schemaColumn = schema[column];
+        if (!schemaColumn) {
           throw new Error(`Field ${column} does not exist in the schema`);
         }
-        const type = schema[column].type;
+        const { type } = schemaColumn;
         if (type !== 'BLOB') {
           throw new Error(`Field ${column} is not a BLOB, you can't use jpath`);
         }
         // check type is    const column = schema[field];
-        const accessor = `${parts[0]} ->> '$.${parts.slice(1).join('.')}'`;
+        const accessor = `${column} ->> '$.${parts.slice(1).join('.')}'`;
         parameters.push({ column, accessor, type, jpath, isJpath: true });
       }
     }

@@ -1,8 +1,7 @@
-import type { Database } from 'better-sqlite3';
-import sqLite from 'better-sqlite3';
+import { DatabaseSync } from 'node:sqlite';
 
-export function getDBBoolean(): Database {
-  const db = sqLite(':memory:');
+export function getDBBoolean(): DatabaseSync {
+  const db = new DatabaseSync(':memory:');
 
   const sql = `
     CREATE TABLE IF NOT EXISTS entries (

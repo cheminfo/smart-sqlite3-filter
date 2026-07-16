@@ -81,8 +81,11 @@ test('logger', () => {
   const logs = logger2.getLogs();
 
   expect(logs).toHaveLength(1);
-  expect(logs[0].message).toBe(
+
+  const [log] = logs;
+
+  expect(log?.message).toBe(
     'SQL statement: SELECT * FROM entries WHERE ((textColumn LIKE :textColumn_0_0)) LIMIT 1000',
   );
-  expect(logs[0].meta).toStrictEqual({ textColumn_0_0: 'text-1%' });
+  expect(log?.meta).toStrictEqual({ textColumn_0_0: 'text-1%' });
 });

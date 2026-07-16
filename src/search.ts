@@ -1,4 +1,5 @@
-import type { Database } from 'better-sqlite3';
+import type { DatabaseSync } from 'node:sqlite';
+
 import type { Logger } from 'cheminfo-types';
 
 import { buildWhere, getTableName } from './buildWhere.ts';
@@ -57,7 +58,7 @@ export type Entry = Record<string, number | string>;
  */
 export function search(
   queryString: string,
-  db: Database,
+  db: DatabaseSync,
   options: SearchOptions = {},
 ): Entry[] {
   const {
@@ -93,7 +94,15 @@ export function search(
 
   logger?.debug(values, `SQL statement: ${sqls.join(' ')}`);
   const stmt = db.prepare(sqls.join(' '));
-  return stmt.all(values) as Entry[];
+  const rows = stmt.all(values);
+  // node:sqlite hands back null-prototype rows whose properties stay in V8
+  // dictionary mode: reading one costs ~43ns instead of ~4ns. Copying into
+  // plain objects costs ~0.5ms/1000 rows and pays for itself after ~4 passes.
+  const entries: Entry[] = new Array(rows.length);
+  for (let i = 0; i < rows.length; i++) {
+    entries[i] = { ...(rows[i] as Entry) };
+  }
+  return entries;
 }
 
 /**
@@ -107,7 +116,7 @@ export function search(
  */
 export function count(
   queryString: string,
-  db: Database,
+  db: DatabaseSync,
   options: SearchOptions = {},
 ): number {
   const { tableName = getTableName(db), logger } = options;
