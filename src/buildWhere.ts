@@ -103,7 +103,8 @@ export function getTableName(db: Database): string {
   const stmt = db.prepare('PRAGMA table_list');
   const allTables = stmt.all() as TableList[];
   const tables = allTables.filter((table) => !table.name.startsWith('sqlite_'));
-  if (tables.length === 0) {
+  const [table] = tables;
+  if (!table) {
     throw new Error('Expected at least one table in the database');
   }
   if (tables.length > 1) {
@@ -111,5 +112,5 @@ export function getTableName(db: Database): string {
       'There is more than one table in the database, you need to specify the table name',
     );
   }
-  return tables[0].name;
+  return table.name;
 }

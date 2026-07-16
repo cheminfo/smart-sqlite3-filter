@@ -33,8 +33,7 @@ test('from applies on top of a filter', () => {
     from: 1,
   });
 
-  expect(entries).toHaveLength(1);
-  expect(entries[0].name).toBe('John');
+  expect(entries.map((entry) => entry.name)).toStrictEqual(['John']);
 });
 
 test('columns restricts the selected columns', () => {
